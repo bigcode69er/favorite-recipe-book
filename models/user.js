@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      models.user.hasMany(models.favorite)
     }
   };
   user.init({
@@ -43,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'user',
+    modelName: 'user'
   });
 
   user.addHook('beforeCreate', function(pendingUser) {

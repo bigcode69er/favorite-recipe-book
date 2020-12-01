@@ -5,7 +5,6 @@ const session = require('express-session');
 const passport = require('./config/ppConfig');
 const flash = require('connect-flash');
 const SECRET_SESSION = process.env.SECRET_SESSION;
-console.log(SECRET_SESSION);
 const app = express();
 
 // isLoggedIn middleware
@@ -57,6 +56,7 @@ app.get('/profile', isLoggedIn, (req, res) => {
 
 
 app.use('/auth', require('./routes/auth'));
+app.use('/recipe', require('./routes/recipe'));
 
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {

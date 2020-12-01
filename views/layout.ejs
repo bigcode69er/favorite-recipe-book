@@ -17,11 +17,17 @@
           <% } else {%>
             <li><a href="/auth/logout">Logout</a></li>
             <li><a href="/profile">Profile</a></li>
+            <li><a href="/recipe">Search for A Recipe</a></li>
+            <li><a href="/recipe/fav">Favorites</a></li>
           <% } %>
         </ul>
       </nav>
     </header>
-    <h1>Authentication</h1>
+    <% if (!currentUser) { %>
+      <h1>Authentication</h1>
+    <% } else {%>
+
+    <% } %>
     <%- body %>
   </body>
 </html>

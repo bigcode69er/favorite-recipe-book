@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/romebell/express-authentication.git"
+    "url": "git+https://github.com/richardleung1/favorite-recipe-book.git"
   },
-  "author": "Rome Bell",
+  "author": "Richard Leung",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/romebell/express-authentication/issues"
+    "url": "https://github.com/richardleung1/favorite-recipe-book/issues"
   },
-  "homepage": "https://github.com/romebell/express-authentication#readme",
+  "homepage": "https://github.com/richardleung1/favorite-recipe-book#readme",
   "dependencies": {
     "axios": "^0.21.0",
     "bcrypt": "^5.0.0",
