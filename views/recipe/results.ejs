@@ -3,7 +3,7 @@
 <% results.forEach (recipe => {%>
     <div class="result">
         <a href="/recipe/<%= recipe.id %>"><h3><%= recipe.title %></h3></a>
-        <a href="/recipe/<%= recipe.id %>"><img src="<%= recipe.image %>" alt="image of <%= recipe.title %>"></a>
+        <a href="/recipe/<%= recipe.id %>"><img src="<%= recipe.image %>" alt="Image of <%= recipe.title %>"></a>
         <form action="/" method="POST">
             <input type="hidden" name="title" value="<%= recipe.title %>">
             <input type="hidden" name="recipeId" value="<%= recipe.id %>">

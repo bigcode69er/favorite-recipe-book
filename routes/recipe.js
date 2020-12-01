@@ -4,7 +4,7 @@ const db = require('../models');
 const axios = require('axios');
 const API_KEY = process.env.API_KEY
 
-router.get('/', (req, res) => {
+router.get('/', (req, res) => {console.log
     res.render('recipe/index');
 });
 
@@ -21,8 +21,33 @@ router.get('/results', (req, res) => {
     })
 });
 
-router.get('/fav', (req, res) => {
-    res.render('recipe/fav');
+router.post('/', (req, res) => {
+    const title = req.body.title;
+    const recipeId = req.body.recipeId;
+    const image = req.body.image;
+    db.user.findOne()
+    .then(user=>{
+    user.createPet({
+      name: 'Spot',
+      species: 'Mutt Dog'
+    }).then(dog=>{
+      console.log(dog);
+    });
+});
+    db.favorite.findOrCreate({
+        where: {
+        title, recipeId, image
+        }
+    }).then(() => {
+        res.redirect('/favorite');
+    })
+  })
+
+router.get('/favorites', (req, res) => {
+    db.favorite.findAll()
+    .then((recipes) => {
+        res.render('recipe/favorites', { recipes })
+    })
 });
 
 router.get('/:id', (req, res) => {
@@ -30,12 +55,12 @@ router.get('/:id', (req, res) => {
     axios.get(`https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${API_KEY}`)
     .then(function (response) {
         const recipe = response.data;
+        console.log(recipe)
         res.render('recipe/info', { recipe });
     })
     .catch(function (error) {
         res.send(error);
     })
 });
-
 
 module.exports = router;

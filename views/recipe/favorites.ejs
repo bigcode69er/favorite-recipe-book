@@ -1,0 +1,7 @@
+<h1>FAVORITE RECIPES:</h1>
+<% recipes.forEach (recipe => {%>
+    <div class="favorite">
+        <a href="/recipe/<%= recipe.id %>"><h3><%= recipe.title %></h3></a>
+        <a href="/recipe/<%= recipe.id %>"><img src="<%= recipe.image %>" alt="image of <%= recipe.title %>"></a>
+    </div>
+<% }); %>
