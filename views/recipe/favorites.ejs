@@ -3,5 +3,8 @@
     <div class="favorite">
         <a href="/recipe/<%= recipe.recipeId %>"><h3><%= recipe.title %></h3></a>
         <a href="/recipe/<%= recipe.recipeId %>"><img src="<%= recipe.image %>" alt="image of <%= recipe.title %>"></a>
+        <form method="POST" action="/recipe/<%= recipe.recipeId %>/?_method=DELETE">
+            <input type="submit" value="Delete">
+        </form>
     </div>
 <% }); %>

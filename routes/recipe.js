@@ -2,15 +2,20 @@ const express = require('express');
 const router = express.Router();
 const db = require('../models');
 const axios = require('axios');
-const API_KEY = process.env.API_KEY
+const API_KEY = process.env.API_KEY;
 
 router.get('/', (req, res) => {
     res.render('recipe/index');
 });
 
+router.get('/cuisines', (req, res) => {
+    res.render('recipe/cuisines');
+});
+
 router.get('/results', (req, res) => {
     const search = req.query.search;
-    axios.get(`https://api.spoonacular.com/recipes/complexSearch?query=${search}&apiKey=${API_KEY}`)
+    console.log(search)
+    axios.get(`https://api.spoonacular.com/recipes/complexSearch?query=${search}&number=20&apiKey=${API_KEY}`)
     .then(function (response) {
         const results = response.data.results
         console.log(results)
@@ -43,6 +48,16 @@ router.post('/', (req, res) => {
     })
 })
 
+router.delete('/:id', (req, res) => {
+    const recipeId = req.params.id;
+    db.favorite.destroy({
+        where: { recipeId }
+    }).then(() => {
+        res.redirect('/recipe/favorites');
+    })
+
+});
+
 router.get('/favorites', (req, res) => {
     db.favorite.findAll({
         where: {
@@ -55,7 +70,7 @@ router.get('/favorites', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-    const recipeId = req.params.id
+    const recipeId = req.params.id;
     axios.get(`https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${API_KEY}`)
     .then(function (response) {
         const recipe = response.data;
