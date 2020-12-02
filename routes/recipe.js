@@ -8,14 +8,28 @@ router.get('/', (req, res) => {
     res.render('recipe/index');
 });
 
+router.get('/results', (req, res) => {
+    const search = req.query.search;
+    console.log(search)
+    axios.get(`https://api.spoonacular.com/recipes/complexSearch?query=${search}&number=5&apiKey=${API_KEY}`)
+    .then(function (response) {
+        const results = response.data.results
+        console.log(results)
+        res.render('recipe/results', { results })
+    })
+    .catch((error) => {
+        res.send(error);
+    })
+});
+
 router.get('/cuisines', (req, res) => {
     res.render('recipe/cuisines');
 });
 
-router.get('/results', (req, res) => {
-    const search = req.query.search;
-    console.log(search)
-    axios.get(`https://api.spoonacular.com/recipes/complexSearch?query=${search}&number=20&apiKey=${API_KEY}`)
+router.get('/cuisines/results', (req, res) => {
+    const cuisine = req.query.cuisine;
+    console.log(cuisine)
+    axios.get(`https://api.spoonacular.com/recipes/complexSearch?cuisine=${cuisine}&number=5&apiKey=${API_KEY}`)
     .then(function (response) {
         const results = response.data.results
         console.log(results)
@@ -74,7 +88,7 @@ router.get('/:id', (req, res) => {
     axios.get(`https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${API_KEY}`)
     .then(function (response) {
         const recipe = response.data;
-        console.log(recipe)
+        
         res.render('recipe/info', { recipe });
     })
     .catch(function (error) {
