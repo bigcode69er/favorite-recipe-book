@@ -3,7 +3,11 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Authentication</title>
+    <% if (!currentUser) { %>
+      <title>Authentication</title>
+    <% } else {%>
+      <title>Favorite Recipes</title>
+    <% } %>
     <link rel="stylesheet" href="/css/style.css">
   </head>
   <body>
@@ -25,8 +29,6 @@
     </header>
     <% if (!currentUser) { %>
       <h1>Authentication</h1>
-    <% } else {%>
-
     <% } %>
     <%- body %>
   </body>

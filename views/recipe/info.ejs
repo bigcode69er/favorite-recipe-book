@@ -11,13 +11,13 @@
     <p>Time: <%= recipe.readyInMinutes %> minutes</p>
     <p>Servings: <%= recipe.servings %></p>
     <p>Score: <%= recipe.spoonacularScore %></p>
-    <p>Summary: <%= recipe.summary %></p>
+    <p>Summary: <%- recipe.summary %></p>
     Ingredients:<ul>
         <% recipe.extendedIngredients.forEach(function(ingredient) { %>
             <li><%= ingredient.original %></li>
         <% }); %>
     </ul>
     <% if (recipe.instructions !== null) { %>
-        <p>Instructions: <%= recipe.instructions %></p>
+        <p>Instructions: <%- recipe.instructions %></p>
     <% } %>
 </div>

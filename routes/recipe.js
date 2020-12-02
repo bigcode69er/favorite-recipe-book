@@ -4,7 +4,7 @@ const db = require('../models');
 const axios = require('axios');
 const API_KEY = process.env.API_KEY
 
-router.get('/', (req, res) => {console.log
+router.get('/', (req, res) => {
     res.render('recipe/index');
 });
 
@@ -25,26 +25,30 @@ router.post('/', (req, res) => {
     const title = req.body.title;
     const recipeId = req.body.recipeId;
     const image = req.body.image;
-    db.user.findOne()
-    .then(user=>{
-    user.createPet({
-      name: 'Spot',
-      species: 'Mutt Dog'
-    }).then(dog=>{
-      console.log(dog);
-    });
-});
     db.favorite.findOrCreate({
         where: {
-        title, recipeId, image
+            title, recipeId, image
         }
-    }).then(() => {
-        res.redirect('/favorite');
+    }).then(([favorite, created]) => {
+        console.log(favorite)
+        db.user.findOne({
+            where: {
+                id: req.user.dataValues.id
+            }
+        }).then(user => {
+            user.addFavorite(favorite);
+            console.log(favorite)
+        res.redirect('/recipe/favorites'); 
+        })
     })
-  })
+})
 
 router.get('/favorites', (req, res) => {
-    db.favorite.findAll()
+    db.favorite.findAll({
+        where: {
+            userId: req.user.dataValues.id
+        }
+    })
     .then((recipes) => {
         res.render('recipe/favorites', { recipes })
     })
