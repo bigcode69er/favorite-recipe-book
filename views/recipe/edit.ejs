@@ -1,5 +1,5 @@
-<form method="POST" action="/recipe/<%=review.dataValues.recipeId%>/?_method=PUT">
-    <input type="hidden" name="id" value="<%= review.dataValues.id %>">
+<form method="POST" action="/recipe/<%=review.recipeId%>/?_method=PUT">
+    <input type="hidden" name="id" value="<%= review.id %>">
     <label for="score">New Rating(1-10):</label>
     <input type="text" name="score"></br></br>
     <textarea type="text" name="content"></textarea></br></br>

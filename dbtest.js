@@ -1,4 +1,4 @@
-const db = require("./models");
+// const db = require("./models");
 
 // db.favorite.findOrCreate({
 //     where: {
@@ -6,19 +6,21 @@ const db = require("./models");
 //         recipeId: 10,
 //         image: "google.com"
 //     }
-// }).then(([favorite, created]) => {
+// })
+// .then(([favorite, created]) => {
 //     console.log(favorite)
 //     db.user.findOne({
 //         where: {
 //             id: 1}
-//     }).then(user => {
+//     })
+//     .then(user => {
 //         user.addFavorite(favorite);
 //         console.log(favorite)
 //     })
 // })
 
-db.favorite.destroy({
-    where: {
-       title: "egg"
-    }
-})
+// db.favorite.destroy({
+//     where: {
+//        title: "egg"
+//     }
+// })

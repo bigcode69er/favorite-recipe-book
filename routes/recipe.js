@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../models');
 const axios = require('axios');
+const isLoggedIn = require('../middleware/isLoggedIn')
 const API_KEY = process.env.API_KEY;
 
 router.get('/', (req, res) => {
@@ -18,7 +19,8 @@ router.get('/results', (req, res) => {
         res.render('recipe/results', { results })
     })
     .catch((error) => {
-        res.send(error);
+        console.log(error);
+        res.status(400).render('main/404');
     })
 });
 
@@ -36,11 +38,12 @@ router.get('/cuisines/results', (req, res) => {
         res.render('recipe/results', { results })
     })
     .catch((error) => {
-        res.send(error);
+        console.log(error);
+        res.status(400).render('main/404');
     })
 });
 
-router.post('/', (req, res) => {
+router.post('/', isLoggedIn, (req, res) => {
     const title = req.body.title;
     const recipeId = req.body.recipeId;
     const image = req.body.image;
@@ -48,22 +51,28 @@ router.post('/', (req, res) => {
         where: {
             title, recipeId, image
         }
-    }).then(([favorite, created]) => {
+    })
+    .then(([favorite, created]) => {
         console.log(favorite)
         db.user.findOne({
             where: {
-                id: req.user.dataValues.id
+                id: req.user.id
             }
-        }).then(user => {
+        })
+        .then(user => {
             user.addFavorite(favorite);
             console.log(favorite)
         res.redirect('/recipe/favorites'); 
         })
     })
+    .catch((error) => {
+        console.log(error);
+        res.status(400).render('main/404');
+    })
 })
 
-router.post('/review', (req, res) => {
-    const name = req.user.dataValues.name
+router.post('/review', isLoggedIn, (req, res) => {
+    const name = req.user.name
     const recipeId = req.body.recipeId;
     const score = req.body.score;
     const content = req.body.content;
@@ -71,21 +80,27 @@ router.post('/review', (req, res) => {
         where: {
             name, recipeId, score, content
         }
-    }).then(([review, created]) => {
+    })
+    .then(([review, created]) => {
         console.log(review)
         db.user.findOne({
             where: {
-                id: req.user.dataValues.id
+                id: req.user.id
             }
-        }).then(user => {
+        })
+        .then(user => {
             user.addReview(review);
             console.log(review)
         res.redirect(`/recipe/${recipeId}`); 
         })
     })
+    .catch((error) => {
+        console.log(error);
+        res.status(400).render('main/404');
+    })
 })
 
-router.get('/edit/:id', function(req, res){
+router.get('/edit/:id', isLoggedIn, function(req, res){
     const id = req.params.id;
     db.review.findByPk(id).then ((review) => {
         console.log(review)
@@ -93,7 +108,7 @@ router.get('/edit/:id', function(req, res){
     })
 });
 
-router.put('/:id', function(req, res){
+router.put('/:id', isLoggedIn, function(req, res){
     const id = req.body.id
     const score = req.body.score;
     const content = req.body.content;
@@ -102,42 +117,61 @@ router.put('/:id', function(req, res){
         score, content
         }, {
         where: { id }
-    }).then(() => {
+    })
+    .then(() => {
         res.redirect(`/recipe/${recipeId}`);
-    });
+    })
+    .catch((error) => {
+        console.log(error);
+        res.status(400).render('main/404');
+    })
 });
 
-router.delete('/review/:id', (req, res) => {
+router.delete('/review/:id', isLoggedIn, (req, res) => {
     const recipeId = req.body.recipeId;
     const id = req.params.id;
     db.review.destroy({
         where: { id }
-    }).then(() => {
+    })
+    .then(() => {
         res.redirect(`/recipe/${recipeId}`);
+    })
+    .catch((error) => {
+        console.log(error);
+        res.status(400).render('main/404');
     })
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', isLoggedIn, (req, res) => {
     const recipeId = req.params.id;
     db.favorite.destroy({
         where: { recipeId }
-    }).then(() => {
+    })
+    .then(() => {
         res.redirect('/recipe/favorites');
+    })
+    .catch((error) => {
+        console.log(error);
+        res.status(400).render('main/404');
     })
 });
 
-router.get('/favorites', (req, res) => {
+router.get('/favorites', isLoggedIn, (req, res) => {
     db.favorite.findAll({
         where: {
-            userId: req.user.dataValues.id
+            userId: req.user.id
         }
     })
     .then((recipes) => {
         res.render('recipe/favorites', { recipes })
     })
+    .catch((error) => {
+        console.log(error);
+        res.status(400).render('main/404');
+    })
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', isLoggedIn, (req, res) => {
     const recipeId = req.params.id;
     axios.get(`https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${API_KEY}`)
     .then(function (response) {
@@ -149,8 +183,9 @@ router.get('/:id', (req, res) => {
             res.render('recipe/info', { recipe, reviews });
         })
     })
-    .catch(function (error) {
-        res.send(error);
+    .catch((error) => {
+        console.log(error);
+        res.status(400).render('main/404');
     })
 });
 
