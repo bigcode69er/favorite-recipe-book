@@ -85,6 +85,38 @@ router.post('/review', (req, res) => {
     })
 })
 
+router.get('/edit/:id', function(req, res){
+    const id = req.params.id;
+    db.review.findByPk(id).then ((review) => {
+        console.log(review)
+        res.render('recipe/edit', {review});
+    })
+});
+
+router.put('/:id', function(req, res){
+    const id = req.body.id
+    const score = req.body.score;
+    const content = req.body.content;
+    const recipeId = req.params.id;
+    db.review.update({
+        score, content
+        }, {
+        where: { id }
+    }).then(() => {
+        res.redirect(`/recipe/${recipeId}`);
+    });
+});
+
+router.delete('/review/:id', (req, res) => {
+    const recipeId = req.body.recipeId;
+    const id = req.params.id;
+    db.review.destroy({
+        where: { id }
+    }).then(() => {
+        res.redirect(`/recipe/${recipeId}`);
+    })
+});
+
 router.delete('/:id', (req, res) => {
     const recipeId = req.params.id;
     db.favorite.destroy({
@@ -92,7 +124,6 @@ router.delete('/:id', (req, res) => {
     }).then(() => {
         res.redirect('/recipe/favorites');
     })
-
 });
 
 router.get('/favorites', (req, res) => {
@@ -115,7 +146,6 @@ router.get('/:id', (req, res) => {
             where: { recipeId }
         })
         .then((reviews) => {
-            console.log(reviews)
             res.render('recipe/info', { recipe, reviews });
         })
     })
