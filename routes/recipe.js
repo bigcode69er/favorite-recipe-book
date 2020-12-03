@@ -5,11 +5,11 @@ const axios = require('axios');
 const isLoggedIn = require('../middleware/isLoggedIn')
 const API_KEY = process.env.API_KEY;
 
-router.get('/', (req, res) => {
+router.get('/', isLoggedIn, (req, res) => {
     res.render('recipe/index');
 });
 
-router.get('/results', (req, res) => {
+router.get('/results', isLoggedIn, (req, res) => {
     const search = req.query.search;
     console.log(search)
     axios.get(`https://api.spoonacular.com/recipes/complexSearch?query=${search}&number=5&apiKey=${API_KEY}`)
@@ -24,11 +24,11 @@ router.get('/results', (req, res) => {
     })
 });
 
-router.get('/cuisines', (req, res) => {
+router.get('/cuisines', isLoggedIn, (req, res) => {
     res.render('recipe/cuisines');
 });
 
-router.get('/cuisines/results', (req, res) => {
+router.get('/cuisines/results', isLoggedIn, (req, res) => {
     const cuisine = req.query.cuisine;
     console.log(cuisine)
     axios.get(`https://api.spoonacular.com/recipes/complexSearch?cuisine=${cuisine}&number=5&apiKey=${API_KEY}`)
