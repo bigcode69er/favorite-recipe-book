@@ -28,3 +28,26 @@
         <p>Instructions: <%- recipe.instructions %></p>
     <% } %>
 </div>
+<div class="reviews">
+    <% if (reviews.length < 1 ) { %>
+        <p>Tried the recipe? Be the first to make a review!</p>
+    <% } else { %>
+        <% reviews.forEach (review => {%>
+            <div class="review">
+                <p>Name: <%= review.dataValues.name %></p>
+                <p>Score: <%= review.dataValues.score %></p>
+                <p>Review:<%= review.dataValues.content %></p>
+            </div>
+        <% }); %>
+    <% }; %>
+</div>
+<div class="new">
+    <p>Write a Review</p>
+    <form action="/recipe/review" method="POST">
+        <input type="hidden" name="recipeId" value="<%= recipe.id %>">
+        <label for="score">Score(1-10):</label>
+        <input type="text" name="score"></br></br>
+        <textarea type="text" name="content"></textarea></br></br>
+        <input type="submit" value="Add Review">
+    </form>
+</div>

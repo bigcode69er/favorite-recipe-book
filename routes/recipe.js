@@ -62,6 +62,29 @@ router.post('/', (req, res) => {
     })
 })
 
+router.post('/review', (req, res) => {
+    const name = req.user.dataValues.name
+    const recipeId = req.body.recipeId;
+    const score = req.body.score;
+    const content = req.body.content;
+    db.review.findOrCreate({
+        where: {
+            name, recipeId, score, content
+        }
+    }).then(([review, created]) => {
+        console.log(review)
+        db.user.findOne({
+            where: {
+                id: req.user.dataValues.id
+            }
+        }).then(user => {
+            user.addReview(review);
+            console.log(review)
+        res.redirect(`/recipe/${recipeId}`); 
+        })
+    })
+})
+
 router.delete('/:id', (req, res) => {
     const recipeId = req.params.id;
     db.favorite.destroy({
@@ -88,8 +111,13 @@ router.get('/:id', (req, res) => {
     axios.get(`https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${API_KEY}`)
     .then(function (response) {
         const recipe = response.data;
-        
-        res.render('recipe/info', { recipe });
+        db.review.findAll({
+            where: { recipeId }
+        })
+        .then((reviews) => {
+            console.log(reviews)
+            res.render('recipe/info', { recipe, reviews });
+        })
     })
     .catch(function (error) {
         res.send(error);
