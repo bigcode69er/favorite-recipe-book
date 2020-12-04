@@ -1,6 +1,8 @@
-# Express Authentication
+# Favorite-Recipe-Book
 
-Express authentication template using Passport + flash messages + custom middleware
+A recipe book which uses the Spoonacular API to search for recipes + allow users to add/delete favorite recipes + make/edit/delete reviews</br>
+It includes the express authentication template which uses Passport + flash messages + custom middleware
+
 
 ## What it includes
 
@@ -23,54 +25,86 @@ Express authentication template using Passport + flash messages + custom middlew
 | createdAt | Date | Auto-generated |
 | updatedAt | Date | Auto-generated |
 
-### Default Routes
+### Favorite Model
+
+| Column Name | Data Type | Notes |
+| --------------- | ------------- | ------------------------------ |
+| id | Integer | Serial Primary Key, Auto-generated |
+| userId | Integer | Foreign Key |
+| recipeId | Integer | Must be unique / used to find recipe |
+| title | String | Must be provided |
+| image | String | Must be provided |
+| createdAt | Date | Auto-generated |
+| updatedAt | Date | Auto-generated |
+
+### Review Model
+
+| Column Name | Data Type | Notes |
+| --------------- | ------------- | ------------------------------ |
+| id | Integer | Serial Primary Key, Auto-generated |
+| userId | Integer | Foreign Key |
+| name | String | Must be provided |
+| recipeId | Integer | Must be unique / used to find recipe |
+| score | Integer | Must be provided |
+| content | Text | Must be provided |
+| createdAt | Date | Auto-generated |
+| updatedAt | Date | Auto-generated |
+
+### Routes
 
 | Method | Path | Location | Purpose |
 | ------ | ---------------- | -------------- | ------------------- |
-| GET | / | server.js | Home page |
-| GET | /auth/login | auth.js | Login form |
-| GET | /auth/signup | auth.js | Signup form |
-| POST | /auth/login | auth.js | Login user |
+| GET | / | server.js | Home Page |
+| GET | /auth/login | auth.js | Login Form |
+| GET | /auth/signup | auth.js | Signup Form |
+| POST | /auth/login | auth.js | Login User |
 | POST | /auth/signup | auth.js | Creates User |
-| GET | /auth/logout | auth.js | Removes session info |
+| GET | /auth/logout | auth.js | Removes Session Info |
 | GET | /profile | server.js | Regular User Profile |
+| GET | /recipe | recipe.js | Recipe Search Index |
+| GET | /recipe/cuisines | recipe.js | Recipe Search By Cuisine |
+| GET | /recipe/results | recipe.js | Recipe Search Results |
+| POST | /recipe/review | recipe.js | Add Review |
+| GET | /recipe/edit/:id | recipe.js | Edit Review |
+| PUT | /recipe/:id | recipe.js | Edit Review |
+| DELETE | /recipe/review/:id | recipe.js | Delete Review |
+| POST | /recipe | recipe.js | Add Favorite |
+| DELETE | /recipe/:id | recipe.js | Delete Favorite |
+| GET | /recipe/favorites | recipe.js | Favorite Recipes |
+| GET | /recipe/:id | recipe.js | Recipe |
 
 ## Steps To Use
 
-#### 1. Create a new repo on Github and use your 'express-authentication' as the template
+### Deployed on Heroku
 
-When we are finished with this boilerplate, we are going to make it a template on Github that will allow us to create a new repo on Github with all this code already loaded in.
-* Go to `github.com` and create a new repository. In the template dropdown, choose this template.
-* Clone your new repo to your local machine
-* Get Codin'!
+[Heroku](https://favorite-recipe-book.herokuapp.com/)
 
-#### 2. Delete any .keep files
+1. Sign up for an account
+2. Login with account
+3. Start searching for recipes
 
-The `.keep` files are there to maintain the file structure of the auth. If there is a folder that has nothing in it, git won't add it. The dev work around is to add a file to it that has nothing in it, just forces git to keep the folder so we can use it later.
+### Install on Local Machine
 
-#### 3. Install node modules from the package.json
+#### 1. Fork and clone gitHub repo into local machine
 
-```
-npm install
-```
+[GitHub Repo](https://github.com/richardleung1/favorite-recipe-book)
 
-(Or just `npm i` for short)
+#### 2. Install Node Modules
 
-#### 4. Customize with new project name
+Type `npm install` or `npm i` in terminal to install node modules
 
-Remove defaulty type stuff. Some areas to consider are:
+#### 3. Create database
 
-* Title in `layout.ejs`
-* Description/Repo Link in `package.json`
-* Remove boilerplate's README content and replace with new project's readme
+Type `sequelize db:create` in terminal to create database
 
-#### 5. Create a new database for the new project
+#### 4. Migrate models
 
-Using the sequelize command line interface, you can create a new database from the terminal.
+Type `sequelize db:migrate` in terminal to migrate models
 
-```
-createdb <new_db_name>
-```
+#### 5. Create a `.env` file
+
+1. `SESSION_SECRET` and set it equal to any random string.
+
 
 #### 6. Update `config.json`
 

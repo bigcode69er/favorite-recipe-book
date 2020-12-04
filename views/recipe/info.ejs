@@ -1,5 +1,5 @@
 <div class="top">
-    <h1><%= recipe.title %></h1>
+    <h2><%= recipe.title %></h2>
     <img src="<%= recipe.image %>" alt="Image of <%= recipe.title %>"></br></br>
     <form action="/recipe" method="POST">
         <input type="hidden" name="title" value="<%= recipe.title %>">
@@ -9,33 +9,38 @@
     </form>
 </div>
 <div class="info">
-
     <% if (recipe.cuisines.length > 0) { %>
-        <p>Cuisines: <% recipe.cuisines.forEach(function(cuisine) { %>
-            <%= cuisine %>
-        <% }); %></p>
+        Cuisines: <ul><% recipe.cuisines.forEach(function(cuisine) { %>
+            <li><%= cuisine %></li>
+        <% }); %>
+    </ul>
     <% } %>
     <p>Time: <%= recipe.readyInMinutes %> minutes</p>
     <p>Servings: <%= recipe.servings %></p>
-    <p>Score: <%= recipe.spoonacularScore %></p>
+    <p>Spoonacular Score: <%= recipe.spoonacularScore %></p>
     <p>Summary: <%- recipe.summary %></p>
+</div>
+<div class="ingredients">
     Ingredients:<ul>
         <% recipe.extendedIngredients.forEach(function(ingredient) { %>
             <li><%= ingredient.original %></li>
         <% }); %>
     </ul>
+</div>
+<div class="instructions">
     <% if (recipe.instructions !== null) { %>
-        <p>Instructions: <%- recipe.instructions %></p>
+        Instructions: <%- recipe.instructions %>
     <% } %>
 </div>
 <div class="reviews">
+    <h3>Reviews</h3>
     <% if (reviews.length < 1) { %>
         <p>Tried the recipe? Be the first to make a review!</p>
     <% } else { %>
         <% reviews.forEach (review => {%>
             <div class="review">
                 <p>Name: <%= review.name %></p>
-                <p>Score: <%= review.score %></p>
+                <p>Rating: <%= review.score %></p>
                 <p>Review:<%= review.content %></p>
                 <% if (review.userId === currentUser.id) { %>
                     <a class="alert alert-warning" href="/recipe/edit/<%= review.id %>">Edit Review</a></br></br>
@@ -49,7 +54,7 @@
     <% }; %>
 </div>
 <div class="new">
-    <p>Write a Review</p>
+    <h5>Write a Review</h5>
     <form action="/recipe/review" method="POST">
         <input type="hidden" name="recipeId" value="<%= recipe.id %>">
         <label for="score">Rating(1-10):</label>
