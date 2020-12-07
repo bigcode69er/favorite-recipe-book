@@ -11,7 +11,7 @@ router.get('/', isLoggedIn, (req, res) => {
 
 router.get('/results', isLoggedIn, (req, res) => {
     const search = req.query.search;
-    axios.get(`https://api.spoonacular.com/recipes/complexSearch?query=${search}&number=5&apiKey=${API_KEY}`)
+    axios.get(`https://api.spoonacular.com/recipes/complexSearch?query=${search}&number=15&apiKey=${API_KEY}`)
     .then(function (response) {
         const results = response.data.results
         res.render('recipe/results', { results })
@@ -28,7 +28,7 @@ router.get('/cuisines', isLoggedIn, (req, res) => {
 
 router.get('/cuisines/results', isLoggedIn, (req, res) => {
     const cuisine = req.query.cuisine;
-    axios.get(`https://api.spoonacular.com/recipes/complexSearch?cuisine=${cuisine}&number=5&apiKey=${API_KEY}`)
+    axios.get(`https://api.spoonacular.com/recipes/complexSearch?cuisine=${cuisine}&number=15&apiKey=${API_KEY}`)
     .then(function (response) {
         const results = response.data.results
         res.render('recipe/results', { results })

@@ -1,1 +1,8 @@
 <h2>Homepage</h2>
+<% if (!currentUser) { %>
+<h5><a href="/auth/signup">Signup</a> or <a href="/auth/login">Login</a> to start search for recipes.</h5>
+<% } else {%>
+<a href="/recipe">Search for A Recipe</a>
+<a href="/recipe/cuisines">Search By Cuisine</a>
+See Your <a href="/recipe/favorites">Favorites</a>
+<% } %>
